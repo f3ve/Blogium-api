@@ -5,6 +5,7 @@ CREATE TABLE posts (
   title TEXT NOT NULL,
   content TEXT NOT NULL,
   img text,
+  published BOOLEAN NOT NULL DEFAULT FALSE,
   date_created TIMESTAMPTZ NOT NULL DEFAULT now(),
   date_modified TIMESTAMPTZ NOT NULL DEFAULT now()
 )
