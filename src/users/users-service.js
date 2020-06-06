@@ -23,7 +23,6 @@ const UsersService = {
     if (username.length < 4) {
       return 'Username must be at least 4 characters'
     }
-
     if (username.startsWith(' ') || username.endsWith(' ')) {
       return `Username cannot start or end with empty space`
     }
