@@ -5,6 +5,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config');
 const usersRouter = require('./users/users-router')
+const authRouter = require('./auth/auth-routers')
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use(function errorHandler(error, req, res, next) {
   res.status(500).json(response)
 })
 
+app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 
 // app.get('/', (req, res) => {
