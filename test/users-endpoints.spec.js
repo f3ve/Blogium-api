@@ -247,4 +247,144 @@ describe('Users Endpoints', () => {
       })
     })
   })
+
+  describe('GET /api/users', () => {
+    context('given no users', () => {
+      it(`responds with 200 and an empty list`, () => {
+        return supertest(app)
+          .get('/api/users')
+          .expect(200, [])
+      })
+    })
+    
+    context('Given there are users in the database', () => {
+      beforeEach('insert users', () => 
+        helpers.seedUsers(
+          db,
+          testUsers
+        )
+      )
+
+      it(`responds with 200 and all the users builds`, () => {
+        const expectedUsers = testUsers.map(user => helpers.makeExpectedUser(user))
+        return supertest(app)
+          .get('/api/users')
+          .expect(200, expectedUsers)
+      })
+    })
+  })
+
+  describe('GET /api/users/:user_id', () => {
+    context(`Given No user`, () => {
+      it(`responds with 404`, () => {
+        return supertest(app)
+          .get(`/api/users/123456`)
+          .expect(404, {error: 'User does not exist'})
+      })
+    })
+
+    context(`Given user is in the database`, () => {
+      beforeEach('insert users', () => 
+        helpers.seedUsers(
+          db,
+          testUsers
+        )
+      )
+
+      it('responds with 200 and the expected user', () => {
+        const userId = 2
+        const expectedUser = testUsers.filter(u => u.id === userId).map(helpers.makeExpectedUser)[0]
+
+        return supertest(app)
+          .get(`/api/users/${userId}`)
+          .expect(200, expectedUser)
+      })
+    })
+  })
+
+  describe('DELETE /api/users/:user_id', () => {
+    context(`given no users`, () => {
+      it(`responds with 404`, () => {
+        return supertest(app)
+          .delete(`/api/users/123456`)
+          .expect(404, {error: 'User does not exist'})
+      })
+    })
+
+    context('Given user exists', () => {
+      beforeEach('insert users', () => 
+        helpers.seedUsers(
+          db, testUsers
+        )
+      )
+
+      it(`responds with 204 and removes the user from the database`, () => {
+        const userId = 3
+        const user = testUsers.filter(u => u.id === userId)[0]
+        const expectUsers = testUsers.filter(u => u.id !== userId).map(u => helpers.makeExpectedUser(u))
+        return supertest(app)
+          .delete(`/api/users/${userId}`)
+          .set('Authorization', helpers.makeAuthHeader(user))
+          .expect(204)
+            .then(res => 
+              supertest(app)
+                .get(`/api/users`)
+                .expect(expectUsers)
+            )
+      })
+    })
+  })
+
+  describe.only('PATCH', () => {
+    context(`given no users`, () => {
+      it('responds 404', () => {
+        return supertest(app)
+          .patch('/api/users/123456')
+          .expect(404, {error: 'User does not exist'})
+      })
+    })
+
+    context('Given the user exists', () => {
+      beforeEach('Insert users', () => 
+        helpers.seedUsers(
+          db,
+          testUsers
+        )
+      )
+
+      it.only('responds 204 and updates the user info', () => {
+        const userId = 1
+        const user = testUsers.filter(u => u.id === userId)[0]
+        const updateUser = {
+          full_name: 'Test new full name',
+          username: 'test new username',
+          bio: 'New test bio for test user 1',
+          img: 'new test img',
+          email: 'new test email',
+          date_modified: '2020-06-08T05:25:16.626Z'
+        }
+
+        return supertest(app)
+          .patch(`/api/users/${userId}`)
+          .set('Authorization', helpers.makeAuthHeader(user))
+          .send(updateUser)
+          .expect(204)
+          .then(res => 
+            supertest(app)
+              .get(`/api/users/${userId}`)
+              .expect(res => {
+                const {body} = res
+                expect(body.id).to.eql(user.id)
+                expect(body.email).to.eql(updateUser.email)
+                expect(body.full_name).to.eql(updateUser.full_name)
+                expect(body.username).to.eql(updateUser.username)
+                expect(body.img).to.eql(updateUser.img)
+                expect(body.date_modified).to.eql(updateUser.date_modified)
+                expect(body.date_created).to.eql(user.date_created)
+                expect(body).to.not.have.property('password')
+              })
+          )
+      })
+    })
+  })
 })

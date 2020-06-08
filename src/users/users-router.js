@@ -1,12 +1,14 @@
 const express = require('express')
 const path = require('path')
 const UsersService = require('./users-service')
+const {requireAuth} = require('../middleware/jwt-auth')
 
 const usersRouter = express.Router()
 const jsonBodyParser = express.json()
 
 usersRouter
-  .post('/', jsonBodyParser, (req, res, next) => {
+  .route('/')
+  .post(jsonBodyParser, (req, res, next) => {
     const {password, username, full_name, email, bio, img, matchPassword} = req.body
 
     for (const field of ['full_name', 'username', 'email', 'password']) {
@@ -69,6 +71,76 @@ usersRouter
         next(error)
       })
   })
+  .get((req, res, next) => {
+    UsersService.getAllUsers(req.app.get('db'))
+      .then(usrs => {
+        res.json(usrs.map(UsersService.serializeUser))
+      })
+      .catch(err => next(err))
+  })
 
+  usersRouter
+    .route('/:user_id')
+    .all(checkUserExists)
+    .get((req, res) => {
+      res.json(UsersService.serializeUser(res.user))
+    })
+    .patch(requireAuth, jsonBodyParser, (req, res, next) => {
+      const {username, full_name, bio, img, email, date_modified} = req.body
+      const userToUpdate = {username, full_name, bio, img, email, date_modified}
+
+      const numOfValues = Object.values(userToUpdate).filter(Boolean).length
+      if(numOfValues === 0)
+        return res.status(400).json({
+          error: {
+            message: `Request body must contain either 'Full_name', 'username', 'bio', or 'img'`
+          }
+        })
+
+      UsersService.updateUser(
+        req.app.get('db'),
+        req.params.user_id,
+        userToUpdate
+      )
+        .then(() => {
+          res.status(204).end()
+        })
+        .catch(err => next(err))
+    })
+    .delete(requireAuth, (req, res, next) => {
+      const {user, params, app} = req
+      if (parseInt(user.id) !== parseInt(params.user_id))
+        return res.status(401).json({
+          error: 'Unauthorized request'
+        })
+
+      UsersService.deleteUser(
+        app.get('db'),
+        params.user_id
+      )
+        .then(() => {
+          res.status(204).end()
+        })
+        .catch(err => next(err))
+    })
+
+async function checkUserExists(req, res, next) {
+  try {
+    const user = await UsersService.getUserByid(
+      req.app.get('db'),
+      req.params.user_id
+    )
+
+    if (!user)
+      return res.status(404).json({
+        error: 'User does not exist'
+      })
+    
+    res.user = user
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
 
 module.exports = usersRouter

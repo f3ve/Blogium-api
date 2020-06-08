@@ -19,6 +19,32 @@ const UsersService = {
       .then(([user]) => user)
   },
 
+  getAllUsers(db) {
+    return db
+      .from('users')
+      .select('*')
+  },
+
+  getUserByid(db, id) {
+    return UsersService.getAllUsers(db)
+      .where('id', id)
+      .first()
+  },
+
+  updateUser(db, id, newUserFields) {
+    return db
+      .from('users')
+      .where('id', id)
+      .update(newUserFields)
+  },
+
+  deleteUser(db, id) {
+    return db
+      .from('users')
+      .where('id', id)
+      .delete()
+  },
+
   validateUsername(username) {
     if (username.length < 4) {
       return 'Username must be at least 4 characters'
