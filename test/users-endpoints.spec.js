@@ -335,7 +335,7 @@ describe('Users Endpoints', () => {
     })
   })
 
-  describe.only('PATCH', () => {
+  describe('PATCH', () => {
     context(`given no users`, () => {
       it('responds 404', () => {
         return supertest(app)
@@ -352,7 +352,7 @@ describe('Users Endpoints', () => {
         )
       )
 
-      it.only('responds 204 and updates the user info', () => {
+      it('responds 204 and updates the user info', () => {
         const userId = 1
         const user = testUsers.filter(u => u.id === userId)[0]
         const updateUser = {
