@@ -303,7 +303,7 @@ function makeMaliciousPost(user) {
   }
 }
 
-function seedMaliciousData(db, user, post) {
+function seedMaliciousData(db, user, post, comments) {
   return seedUsers(db, [user])
     .then(() =>
       db

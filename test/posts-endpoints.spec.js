@@ -73,5 +73,16 @@ describe('Posts Endpoints', () => {
         maliciousPost  
       )
     })
+
+    it('removes XSS attack content', () => {
+      return supertest(app)
+        .get(`/api/posts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.body[0].title).to.eql(expectedPost.title)
+          expect(res.body[0].content).to.eql(expectedPost.content)
+          expect(res.body[0].img).to.eql
+        })
+    })
   })
 })
