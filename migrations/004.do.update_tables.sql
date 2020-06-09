@@ -1,7 +1,7 @@
 ALTER TABLE users
-  ALTER COLUMN
-    date_modified TIMESTAMPTZ;
+  ALTER COLUMN date_modified DROP NOT NULl,
+  ALTER COLUMN date_modified DROP DEFAULT;
 
 ALTER TABLE posts
-  ALTER COLUMN
-    date_modified TIMESTAMPTZ;
+  ALTER COLUMN date_modified DROP NOT NULL,
+  ALTER COLUMN date_modified DROP DEFAULT;
