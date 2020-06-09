@@ -12,6 +12,7 @@ const PostsService = {
         'p.date_modified',
         'p.content',
         'p.published',
+        'p.user_id',
         db.raw(
           `count(DISTINCT comm) AS number_of_comments`
         ),
@@ -39,20 +40,43 @@ const PostsService = {
       .groupBy('p.id', 'users.id')
   },
 
+  insertPost(db, newPost) {
+    return db
+      .insert(newPost)
+      .into('posts')
+      .returning('*')
+      .then(([post]) => PostsService.getById(db, post.id))
+  },
+
   getPublished(db) {
     return PostsService._getAllPosts(db)
       .where('p.published', true)
   },
 
-  getUnpublished(db) {
+  getUnpublished(db, userId) {
     return PostsService._getAllPosts(db)
-      .where('p.publisged', false)
+    .where('p.published', false)
+    .where('p.user_id', userId)
   },
 
   getById(db, id) {
     return PostsService._getAllPosts(db)
       .where('p.id', id)
       .first()
+  },
+
+  deletePost(db, id) {
+    return db
+      .from('posts')
+      .where('id', id)
+      .delete()
+  },
+
+  updatePost(db, id, newPostFields) {
+    return db
+      .from('posts')
+      .where('id', id)
+      .update(newPostFields)
   },
 
   getPostComments(db, post_id) {
@@ -92,8 +116,9 @@ const PostsService = {
       content: xss(post.content),
       img: xss(post.img),
       date_created: new Date(post.date_created),
-      date_modified: new Date(post.date_modified),
+      date_modified: new Date(post.date_modified) || null,
       number_of_comments: Number(post.number_of_comments) || 0,
+      published: post.published,
       user: {
         id: user.id,
         username: user.username,
