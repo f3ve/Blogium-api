@@ -30,8 +30,11 @@ commentsRouter
           .location(path.posix.join(req.originalUrl, `/${comment.id}`))
           .json(CommentsService.serializeComment(comment))
       })
-      .catch(next)
+      .catch(err => {
+        next(err)
+      })
     })
+
 commentsRouter
   .route('/:comment_id')
   .delete(checkCommentExists, requireAuth, (req, res, next) => {
@@ -42,12 +45,15 @@ commentsRouter
       .then(() => {
         res.status(204).end()
       })
-      .catch(err => next(err))
+      .catch(err => {
+        console.log(err)
+        next(err)
+      })
   })
 
   async function checkCommentExists(req, res, next) {
     try {
-      const comment = await CommentsService.getUserByid(
+      const comment = await CommentsService.getById(
         req.app.get('db'),
         req.params.comment_id
       )
