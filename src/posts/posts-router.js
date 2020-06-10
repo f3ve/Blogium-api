@@ -52,7 +52,6 @@ postsRouter
         res.json(posts.map(PostsService.serializePost))
       })
       .catch(err => {
-        console.log(err)
         next(err)
       })
   })

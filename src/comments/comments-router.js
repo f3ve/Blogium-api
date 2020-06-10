@@ -46,7 +46,6 @@ commentsRouter
         res.status(204).end()
       })
       .catch(err => {
-        console.log(err)
         next(err)
       })
   })
