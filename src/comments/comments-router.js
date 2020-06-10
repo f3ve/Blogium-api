@@ -10,7 +10,7 @@ commentsRouter
   .route('/')
   .post(requireAuth, jsonBodyParser, (req, res, next) => {
     const { post_id, content } = req.body
-    const newComment = { post_id, content }
+    const newComment = { post_id, content, user_id: req.user.id}
 
     for (const [key, value] of Object.entries(newComment))
       if (value == null)
@@ -18,7 +18,7 @@ commentsRouter
           error: `Missing '${key}' in request body`
         })
 
-    newComment.user_id = req.user.id
+    // newComment.user_id = req.user.id
 
     CommentsService.insertComment(
       req.app.get('db'),

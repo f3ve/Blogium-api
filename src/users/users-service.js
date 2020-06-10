@@ -84,6 +84,51 @@ const UsersService = {
 		return bcrypt.hash(password, 12)
   },
 
+  getUserPosts(db, userId) {
+    return db
+      .from('posts AS p')
+      .select(
+        'p.id',
+        'p.title',
+        'p.date_created',
+        'p.img',
+        db.raw(
+          `json_strip_nulls(
+            row_to_json(
+              (SELECT tmp FROM (
+                SELECT
+                  u.id,
+                  u.username
+              ) tmp)
+            )
+          ) AS "user"`
+        )
+      )
+      .where('p.user_id', userId)
+      .where('p.published', true)
+      .leftJoin(
+        'users AS u',
+        'p.user_id',
+        'u.id'
+      )
+      .groupBy('p.id', 'u.id')
+  },
+
+  serializePost(post) {
+    const {user} = post
+    return {
+      id: post.id,
+      content: xss(post.content),
+      title: xss(post.title),
+      date_created: post.date_created,
+      img: xss(post.img),
+      user: {
+        id: user.id,
+        username: xss(user.username)
+      }
+    }
+  },
+
   serializeUser(user) {
     return {
       id: user.id,

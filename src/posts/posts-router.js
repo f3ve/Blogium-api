@@ -18,13 +18,14 @@ postsRouter
       })
   })
   .post(requireAuth, jsonBodyParser, (req, res, next) => {
-    const {title, content, img,} = req.body
+    const {title, content, img, published} = req.body
 
     const newPost = {
       user_id: req.user.id,
       title,
       content,
       img,
+      published,
       date_created: 'now()'
     }
 
@@ -85,6 +86,20 @@ postsRouter
         res.status(204).end()
       })
       .catch(err => next(err))
+  })
+
+postsRouter
+  .route('/:post_id/comments')
+  .get((req, res, next) => {
+    PostsService.getPostComments(
+      req.app.get('db'), 
+      req.params.post_id)
+      .then(comments => {
+        res.json(comments.map(PostsService.serializeComment))
+      })
+      .catch(err => {
+        next(err)
+      })
   })
 
 async function CheckPostExists(req, res, next) {

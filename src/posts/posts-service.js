@@ -53,6 +53,11 @@ const PostsService = {
       .where('p.published', true)
   },
 
+  getUserPublishedPosts(db, userId) {
+    return PostsService._getAllPosts(db)
+      .where('p.user_id', userId)
+  },
+
   getUnpublished(db, userId) {
     return PostsService._getAllPosts(db)
     .where('p.published', false)
@@ -85,15 +90,15 @@ const PostsService = {
       .select(
         'comm.id',
         'comm.content',
-        'com.date_created',
+        'comm.date_created',
         db.raw(
           `json_strip_nulls(
             row_to_json(
               (SELECT tmp FROM (
                 SELECT
-                  user.id,
-                  user.username,
-                  user.img
+                  users.id,
+                  users.username,
+                  users.img
               ) tmp)
             )
           ) AS "user"`
@@ -103,9 +108,9 @@ const PostsService = {
       .leftJoin(
         'users',
         'comm.user_id',
-        'user.id'
+        'users.id'
       )
-      .groupBy('comm.id', 'user.id')
+      .groupBy('comm.id', 'users.id')
   },
 
   serializePost(post) {
@@ -121,9 +126,9 @@ const PostsService = {
       published: post.published,
       user: {
         id: user.id,
-        username: user.username,
-        img: user.img,
-        bio: user.bio
+        username: xss(user.username),
+        img: xss(user.img),
+        bio: xss(user.bio)
       }
     }
   },
@@ -133,12 +138,12 @@ const PostsService = {
     return {
       id: com.id,
       post_id: com.post_id,
-      content: com.content,
+      content: xss(com.content),
       date_created: com.date_created,
       user: {
         id: user.id,
-        username: user.username,
-        img: user.img
+        username: xss(user.username),
+        img: xss(user.img)
       }
     }
   }

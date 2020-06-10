@@ -9,7 +9,22 @@ const CommentsService = {
         'comm.content',
         'comm.date_created',
         'comm.post_id',
+        db.raw(
+          `json_strip_nulls(
+            json_build_object(
+              'id', users.id,
+              'username', users.username,
+              'img', users.img
+            )
+          ) AS user`
+        )
       )
+      .leftJoin(
+        'users',
+        'comm.user_id',
+        'users.id'
+      )
+      .groupBy('comm.id', 'users.id')
       .where('comm.id', id)
       .first()
   },
@@ -34,6 +49,7 @@ const CommentsService = {
 
   serializeComment(comment) {
     const { user } = comment
+    console.log(comment)
     return {
       id: comment.id,
       content: xss(comment.content),
@@ -41,8 +57,8 @@ const CommentsService = {
       date_created: new Date(comment.date_created),
       user: {
         id: user.id,
-        username: user.username,
-        img: user.img
+        username: xss(user.username),
+        img: xss(user.img)
       },
     }
   }
