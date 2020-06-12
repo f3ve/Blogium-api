@@ -74,8 +74,8 @@ postsRouter
       .catch(err => next(err))
   })
   .patch(requireAuth, jsonBodyParser, (req, res, next) => {
-    const {title, content, img, date_modified, published} = req.body
-    const postToUpdate = { title, content, img, date_modified, published}
+    const {title, content, published, img} = req.body
+    const postToUpdate = { title, content, img, date_modified: new Date(), published}
 
     PostsService.updatePost(
       req.app.get('db'),

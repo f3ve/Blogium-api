@@ -352,7 +352,7 @@ describe('Users Endpoints', () => {
         )
       )
 
-      it('responds 204 and updates the user info', () => {
+      it('responds 200 and updates the user info', () => {
         const userId = 1
         const user = testUsers.filter(u => u.id === userId)[0]
         const updateUser = {
@@ -368,7 +368,7 @@ describe('Users Endpoints', () => {
           .patch(`/api/users/${userId}`)
           .set('Authorization', helpers.makeAuthHeader(user))
           .send(updateUser)
-          .expect(204)
+          .expect(200)
           .then(res => 
             supertest(app)
               .get(`/api/users/${userId}`)
@@ -379,8 +379,6 @@ describe('Users Endpoints', () => {
                 expect(body.full_name).to.eql(updateUser.full_name)
                 expect(body.username).to.eql(updateUser.username)
                 expect(body.img).to.eql(updateUser.img)
-                expect(body.date_modified).to.eql(updateUser.date_modified)
-                expect(body.date_created).to.eql(user.date_created)
                 expect(body).to.not.have.property('password')
               })
           )

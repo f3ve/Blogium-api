@@ -51,7 +51,7 @@ usersRouter
               full_name,
               email,
               bio,
-              img: 'https://blogium.s3.us-west-2.amazonaws.com/default.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEL3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCID2eLACw9CjIKM7xmg1GUx9ncaAXbXfFhdOrXu%2FNNVrxAiAQVIaGscAHysZU1qZ%2ByqlVpA5STGmJUU7JsHYSHu20Eir4AQg2EAAaDDc5OTU3MzY5MDU5NCIMEjLiD%2BOtRmhfC%2BNkKtUBk%2F9il%2BeypK%2FM1ZPhEruSqukD05P14YWVCfsFx1CT45giqTh7P9VxQv3r5Ku4ckMPRXDIFPmKs0JPICzue9BRuTP9PeAEbZRLRXrss%2BvqTlaAKuCJm1dM27GeEYG7%2BYlPLV8Vul4BhHvTKHTGZVMZSFGqgpy4t%2B6GXrSGMVf9%2Bb6xMu%2BiPV6HKkH105NHsL90z3HihUlv8BpTgmGe%2FIRwQu8c7XHCvqsbk%2BymKIAMgvBZ1pHNSa2ZH9IiGhCrq4BKuEiMFpUlJCoqxtQ8WKR4y%2FxKpSeNMKqVhfcFOvcCG4d4p81G1mfTyEjUflRO0W4TobaOz%2BXIjfzFcM2yO4449BlsSuZEItbNzOmFQQhXqvQhT3a8EGdkwlnqHIcRFO2rOunDwVvdsHuwSfbbIz63PLBDN1%2FE7E9rNF64CHDqqMc8e3UJREHabHD1TLrNu1iE%2FMchJIyKG472a8Fq%2F%2By3XhZukbxCzEpBS8v3qMOnRBfxSGDSs9Z1mw%2BGGRGPYgk9ch%2FP2ksYWUdIoUch5JCIF7PlwvPvn4J47EayN%2BuppaGWSEUU%2FEwb8vSuDu3XfvdcwGGH%2BerWDjwrszzj%2BRD1%2BEE%2BerSQ8uq4Hx7BR1RdqPKZjdh1J%2Bj91uCAoYVQjVE%2BgPmaxllXhosphP7i27%2FX5U50zzRjXpr9msDJcnZg8Y4sT85lD7bLxCACfFlPqSrTI2vtZRck0xgMK9p1lURss31TE5skrv%2FBCpJ6HMtJItEjTNFD%2BgP1urXfrstcxG4yhUoRb3ypPVN%2FPJoxKFPYLp1LHS4A&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20200610T220103Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIA3UKSOJDRIWJ5BYJL%2F20200610%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Signature=38d89871833cea3dbeef077ba2529f80c3fb424a1b05eafd33d1a9f3c881741b',
+              img: 'https://firebasestorage.googleapis.com/v0/b/blogium-c1c36.appspot.com/o/default.png?alt=media&token=726bde4d-720e-44b0-9c36-d5ac25380046',
               date_created: 'now()'
             }
 
@@ -102,8 +102,8 @@ usersRouter
         req.params.user_id,
         userToUpdate
       )
-        .then(() => {
-          res.status(204).end()
+        .then(user => {
+          res.status(200).json(UsersService.serializeUser(user))
         })
         .catch(err => next(err))
     })

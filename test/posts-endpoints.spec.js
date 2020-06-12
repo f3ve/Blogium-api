@@ -225,7 +225,6 @@ describe('Posts Endpoints', () => {
           title: 'updated title',
           content: 'updated content',
           img: 'updated img',
-          date_modified: '2020-06-08T05:25:16.626Z'
         }
 
         return supertest(app)
@@ -242,7 +241,6 @@ describe('Posts Endpoints', () => {
                 expect(body.title).to.eql(updatePost.title)
                 expect(body.content).to.eql(updatePost.content)
                 expect(body.img).to.eql(updatePost.img)
-                expect(body.date_modified).to.eql(updatePost.date_modified)
               })
           )
       })

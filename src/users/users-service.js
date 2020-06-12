@@ -36,6 +36,8 @@ const UsersService = {
       .from('users')
       .where('id', id)
       .update(newUserFields)
+      .returning('*')
+      .then(([user]) => user)
   },
 
   deleteUser(db, id) {

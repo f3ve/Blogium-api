@@ -49,7 +49,6 @@ const CommentsService = {
 
   serializeComment(comment) {
     const { user } = comment
-    console.log(comment)
     return {
       id: comment.id,
       content: xss(comment.content),
