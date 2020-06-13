@@ -86,16 +86,24 @@ usersRouter
       res.json(UsersService.serializeUser(res.user))
     })
     .patch(requireAuth, jsonBodyParser, (req, res, next) => {
-      const {username, full_name, bio, img, email, date_modified} = req.body
-      const userToUpdate = {username, full_name, bio, img, email, date_modified: new Date()}
+      const {full_name, bio, img, email} = req.body
+      const userToUpdate = {full_name, bio, img, email, date_modified: new Date()}
 
       const numOfValues = Object.values(userToUpdate).filter(Boolean).length
       if(numOfValues === 0)
         return res.status(400).json({
           error: {
-            message: `Request body must contain either 'Full_name', 'username', 'bio', 'email' or 'img'`
+            message: `Request body must contain either 'Full_name', 'bio', 'email' or 'img'`
           }
         })
+
+        if (email) {
+          const emailError = UsersService.validateEmail(email)
+      
+          if(emailError) {
+            return res.status(400).json({error: emailError})
+          }
+        }
 
       UsersService.updateUser(
         req.app.get('db'),
