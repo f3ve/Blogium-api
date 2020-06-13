@@ -113,7 +113,10 @@ usersRouter
         .then(user => {
           res.status(200).json(UsersService.serializeUser(user))
         })
-        .catch(err => next(err))
+        .catch(err => {
+          console.log(err)
+          next(err)
+        })
     })
     .delete(requireAuth, (req, res, next) => {
       const {user, params, app} = req

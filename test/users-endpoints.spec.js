@@ -357,11 +357,9 @@ describe('Users Endpoints', () => {
         const user = testUsers.filter(u => u.id === userId)[0]
         const updateUser = {
           full_name: 'Test new full name',
-          username: 'test new username',
           bio: 'New test bio for test user 1',
           img: 'new test img',
-          email: 'new test email',
-          date_modified: '2020-06-08T05:25:16.626Z'
+          email: 'newemail@email.com',
         }
 
         return supertest(app)
@@ -377,7 +375,6 @@ describe('Users Endpoints', () => {
                 expect(body.id).to.eql(user.id)
                 expect(body.email).to.eql(updateUser.email)
                 expect(body.full_name).to.eql(updateUser.full_name)
-                expect(body.username).to.eql(updateUser.username)
                 expect(body.img).to.eql(updateUser.img)
                 expect(body).to.not.have.property('password')
               })
