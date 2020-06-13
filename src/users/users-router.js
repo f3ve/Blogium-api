@@ -114,7 +114,6 @@ usersRouter
           res.status(200).json(UsersService.serializeUser(user))
         })
         .catch(err => {
-          console.log(err)
           next(err)
         })
     })
