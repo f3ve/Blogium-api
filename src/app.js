@@ -11,13 +11,17 @@ const commentsRouter = require('./comments/comments-router')
 
 const app = express()
 
+const corsOptions = {
+  origin: CLIENT_ORIGIN
+}
+
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
 
 app.use(morgan(morganOption))
 app.use(helmet())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(function errorHandler(error, req, res, next) {
   let response 
   NODE_ENV === 'production'
