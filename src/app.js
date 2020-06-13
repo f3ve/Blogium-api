@@ -8,6 +8,7 @@ const usersRouter = require('./users/users-router')
 const authRouter = require('./auth/auth-routers')
 const postsRouter = require('./posts/posts-router')
 const commentsRouter = require('./comments/comments-router')
+const {CLIENT_ORIGIN} = require('./config')
 
 const app = express()
 
