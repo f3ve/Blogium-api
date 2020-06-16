@@ -37,9 +37,9 @@ commentsRouter
 commentsRouter
   .route('/:comment_id')
   .delete(checkCommentExists, requireAuth, (req, res, next) => {
-    CommentsService.deleteUser(
-      app.get('db'),
-      params.comment_id
+    CommentsService.deleteComment(
+      req.app.get('db'),
+      req.params.comment_id
     )
       .then(() => {
         res.status(204).end()
