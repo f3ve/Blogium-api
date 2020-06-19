@@ -14,7 +14,7 @@ You can view the live app [here](https://blogium.now.sh/)
 
 ### Auth Endpoints
 
-> POST /api/auth/login
+> ```POST /api/auth/login```
 
 Validates the login credentials against the database and if they are valid returns a JWT
 
