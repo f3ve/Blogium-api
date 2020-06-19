@@ -100,7 +100,8 @@ const UsersService = {
               (SELECT tmp FROM (
                 SELECT
                   u.id,
-                  u.username
+                  u.username,
+                  u.img
               ) tmp)
             )
           ) AS "user"`
@@ -126,7 +127,8 @@ const UsersService = {
       img: xss(post.img),
       user: {
         id: user.id,
-        username: xss(user.username)
+        username: xss(user.username),
+        img: xss(user.img)
       }
     }
   },
