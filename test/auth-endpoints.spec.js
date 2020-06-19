@@ -58,7 +58,7 @@ describe('Auth Enpoints', () => {
         .expect(400, {error: 'Incorrect Username or password'})
     })
 
-    it(`responds wiith 400 'Invalid username or password' when bad password`, () => { 
+    it(`responds with 400 'Invalid username or password' when bad password`, () => { 
       const badPassword = {username: testUser.username, password: 'wrong'}
       return supertest(app)
         .post('/api/auth/login')
