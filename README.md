@@ -220,3 +220,127 @@ GET /api/posts/1/comments
 ]
 ```
 
+### Users Endpoints
+
+### > `POST /api/users`
+
+After validating the submitted data and hashing the password adds the new user to the database and returns the serialized user
+
+**Example Request Body**
+
+```json
+{
+  "username": "new example username",
+  "full_name": "New User",
+  "password": "example password",
+  "matchPassword": "example password",
+  "email": "example@email.com",
+}
+```
+
+**Example Response**
+
+```json
+{
+  "id": 1,
+  "username": "new example username",
+  "full_name": "New User",
+  "email": "example@email.com",
+  "bio": "", // this is empty because the user has to update it from their account page
+  "img": "./default/img/url", // Defaults to default img, user can update from account page
+  "date_created": "2020-06-19T22:22:33.937Z"
+}
+```
+
+### > `GET /api/users/:user_id`
+
+Returns the specified user
+
+**Sample Query**
+
+```
+GET /api/users/1
+```
+
+**Example Response**
+
+```json
+{
+  "id": 1,
+  "username": "new example username",
+  "full_name": "New User",
+  "email": "example@email.com",
+  "bio": "example bio",
+  "img": "./example/img/url",
+  "date_created": "2020-06-19T22:22:33.937Z"
+}
+```
+
+### > `PATCH /api/users/:user_id
+
+After validating user credentials updates the user int he database with the new data and respnds with the updated user
+
+**Sample Query**
+
+```
+PATCH /api/users/1
+```
+
+**Example Request Body**
+
+```json
+{
+  "bio": "new User Bio",
+  "img": "./url/to/new/img"
+}
+```
+
+**Example Response**
+
+```json
+{
+  "id": 1,
+  "username": "new example username",
+  "full_name": "New User",
+  "email": "example@email.com",
+  "bio": "new User bio",
+  "img": "./url/to/new/img",
+  "date_created": "2020-06-19T22:22:33.937Z"
+}
+```
+
+### > `DELETE /api/users/:user_id
+
+After validating user credentials removes the user from the database
+
+**Sample Query**
+
+```
+DELETE /api/users/1
+```
+
+### > `GET /api/users/:user_id/posts
+
+Returns an array of all of the specified users posts
+
+**Sample Query**
+
+```
+GET /api/users/1/posts
+```
+
+**Example Response**
+
+```json
+[
+  {
+    "id": 1,
+    "username": "new example username",
+    "full_name": "New User",
+    "email": "example@email.com",
+    "bio": "example bio",
+    "img": "./example/img/url",
+    "date_created": "2020-06-19T22:22:33.937Z"
+  }
+]
+```
