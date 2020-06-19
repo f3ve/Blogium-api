@@ -40,7 +40,7 @@ Validates the users JWT that is about to expire and sends a new JWT
 
 ### Comments Endpoints
 
-### > `POST /api/comments
+### > `POST /api/comments`
 
 After validating user JWT saves a new comment to the database and responds with the serialized comment. 
 
@@ -69,7 +69,7 @@ After validating user JWT saves a new comment to the database and responds with 
 }
 ```
 
-### > `DELETE /api/comments/:comment_id
+### > `DELETE /api/comments/:comment_id`
 
 After validating user credentials removes comment from database'
 
@@ -174,11 +174,11 @@ Returns the requested post
 /api/posts/1
 ```
 
-### > `DELETE /api/posts/:post_id
+### > `DELETE /api/posts/:post_id`
 
 after validating user credentials deletes the specified post from the database
 
-### > `PATCH /api/posts/:post_id
+### > `PATCH /api/posts/:post_id`
 
 after validatig user credentials updates the specified post with the new data
 
@@ -219,3 +219,4 @@ GET /api/posts/1/comments
   }
 ]
 ```
+
