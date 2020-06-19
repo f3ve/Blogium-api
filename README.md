@@ -246,8 +246,8 @@ After validating the submitted data and hashing the password adds the new user t
   "username": "new example username",
   "full_name": "New User",
   "email": "example@email.com",
-  "bio": "", // this is empty because the user has to update it from their account page
-  "img": "./default/img/url", // Defaults to default img, user can update from account page
+  "bio": "",
+  "img": "./default/img/url",
   "date_created": "2020-06-19T22:22:33.937Z"
 }
 ```
