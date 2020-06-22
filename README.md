@@ -1,4 +1,4 @@
-# Blogium API 
+# Blogium API
 
 This is the API for Blogium, a blogging platform inspired by Medium. It has a simplistic and minimalist style to allow users to focus on reading and writing blog posts. It features a fully functional text editor that I built from scratch using JavaScript. The editor is designed to be simple and easy to use allowing the user to focus on their writing. Anyone can read posts on Blogium and users can easily create an account to get started writing their own posts.
 
@@ -13,6 +13,8 @@ You can view the live app [here](https://blogium.now.sh/)
 ## API Documentation
 
 ### Auth Endpoints
+
+![auth endpoints](https://github.com/f3ve/Blogium-api/blob/master/images/auth.png)
 
 ### > `POST /api/auth/login`
 
@@ -34,6 +36,7 @@ Validates the login credentials against the database and if they are valid retur
   "authToken": "thISisASampLEjwtAUthToKEN"
 }
 ```
+
 ### > `POST /api/auth/refresh`
 
 Validates the users JWT that is about to expire and sends a new JWT
@@ -42,7 +45,7 @@ Validates the users JWT that is about to expire and sends a new JWT
 
 ### > `POST /api/comments`
 
-After validating user JWT saves a new comment to the database and responds with the serialized comment. 
+After validating user JWT saves a new comment to the database and responds with the serialized comment.
 
 **Example Request Body**
 
@@ -120,7 +123,7 @@ After validating user credentials saves new post in the database and returns the
 }
 ```
 
-**Example Response** 
+**Example Response**
 
 ```json
 {
@@ -234,7 +237,7 @@ After validating the submitted data and hashing the password adds the new user t
   "full_name": "New User",
   "password": "example password",
   "matchPassword": "example password",
-  "email": "example@email.com",
+  "email": "example@email.com"
 }
 ```
 
