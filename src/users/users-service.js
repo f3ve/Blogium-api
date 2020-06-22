@@ -1,14 +1,14 @@
-const bcrypt = require('bcryptjs')
-const xss = require('xss')
+const bcrypt = require('bcryptjs');
+const xss = require('xss');
 
-const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])[\S]+/
+const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])[\S]+/;
 
 const UsersService = {
   hasUserWithUsername(db, username) {
     return db('users')
       .where({ username })
       .first()
-      .then(user => !!user)
+      .then((user) => !!user);
   },
 
   insertUser(db, newUser) {
@@ -16,19 +16,15 @@ const UsersService = {
       .insert(newUser)
       .into('users')
       .returning('*')
-      .then(([user]) => user)
+      .then(([user]) => user);
   },
 
   getAllUsers(db) {
-    return db
-      .from('users')
-      .select('*')
+    return db.from('users').select('*');
   },
 
   getUserByid(db, id) {
-    return UsersService.getAllUsers(db)
-      .where('id', id)
-      .first()
+    return UsersService.getAllUsers(db).where('id', id).first();
   },
 
   updateUser(db, id, newUserFields) {
@@ -37,53 +33,49 @@ const UsersService = {
       .where('id', id)
       .update(newUserFields)
       .returning('*')
-      .then(([user]) => user)
+      .then(([user]) => user);
   },
 
   deleteUser(db, id) {
-    return db
-      .from('users')
-      .where('id', id)
-      .delete()
+    return db.from('users').where('id', id).delete();
   },
 
   validateUsername(username) {
     if (username.length < 4) {
-      return 'Username must be at least 4 characters'
+      return 'Username must be at least 4 characters';
     }
     if (username.startsWith(' ') || username.endsWith(' ')) {
-      return `Username cannot start or end with empty space`
+      return `Username cannot start or end with empty space`;
     }
   },
 
   validateEmail(email) {
-    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-      return 'You must enter a valid email'
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return 'You must enter a valid email';
     }
   },
-
 
   validatePassword(password, matchPassword) {
     if (password.length < 8) {
-      return 'Password must be at least 8 characters'
+      return 'Password must be at least 8 characters';
     }
     if (password.length > 72) {
-      return 'Password must be less than 72 characters'
+      return 'Password must be less than 72 characters';
     }
     if (password.startsWith(' ') || password.endsWith(' ')) {
-      return 'Password must not start or end with empty spaces'
+      return 'Password must not start or end with empty spaces';
     }
     if (!REGEX_UPPER_LOWER_NUMBER_SPECIAL.test(password)) {
-      return 'Password must contain 1 upper case, lower case, number, and special character'
+      return 'Password must contain 1 upper case, lower case, number, and special character';
     }
     if (password !== matchPassword) {
-      return `Passwords don't match`
+      return `Passwords don't match`;
     }
-    return null
+    return null;
   },
 
   hashPassword(password) {
-		return bcrypt.hash(password, 12)
+    return bcrypt.hash(password, 12);
   },
 
   getUserPosts(db, userId) {
@@ -109,16 +101,12 @@ const UsersService = {
       )
       .where('p.user_id', userId)
       .where('p.published', true)
-      .leftJoin(
-        'users AS u',
-        'p.user_id',
-        'u.id'
-      )
-      .groupBy('p.id', 'u.id')
+      .leftJoin('users AS u', 'p.user_id', 'u.id')
+      .groupBy('p.id', 'u.id');
   },
 
   serializePost(post) {
-    const {user} = post
+    const { user } = post;
     return {
       id: post.id,
       content: xss(post.content),
@@ -128,9 +116,9 @@ const UsersService = {
       user: {
         id: user.id,
         username: xss(user.username),
-        img: xss(user.img)
-      }
-    }
+        img: xss(user.img),
+      },
+    };
   },
 
   serializeUser(user) {
@@ -143,8 +131,8 @@ const UsersService = {
       email: xss(user.email),
       date_created: new Date(user.date_created),
       date_modified: new Date(user.date_modified),
-    }
+    };
   },
-}
+};
 
-module.exports = UsersService
+module.exports = UsersService;

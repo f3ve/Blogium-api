@@ -1,4 +1,4 @@
-const xss = require('xss')
+const xss = require('xss');
 
 const CommentsService = {
   getById(db, id) {
@@ -19,14 +19,10 @@ const CommentsService = {
           ) AS user`
         )
       )
-      .leftJoin(
-        'users',
-        'comm.user_id',
-        'users.id'
-      )
+      .leftJoin('users', 'comm.user_id', 'users.id')
       .groupBy('comm.id', 'users.id')
       .where('comm.id', id)
-      .first()
+      .first();
   },
 
   insertComment(db, newComment) {
@@ -35,20 +31,15 @@ const CommentsService = {
       .into('comments')
       .returning('*')
       .then(([comment]) => comment)
-      .then(comment =>
-        CommentsService.getById(db, comment.id)
-      )
+      .then((comment) => CommentsService.getById(db, comment.id));
   },
 
   deleteComment(db, id) {
-    return db
-      .from('comments')
-      .where('id', id)
-      .delete()
+    return db.from('comments').where('id', id).delete();
   },
 
   serializeComment(comment) {
-    const { user } = comment
+    const { user } = comment;
     return {
       id: comment.id,
       content: xss(comment.content),
@@ -57,10 +48,10 @@ const CommentsService = {
       user: {
         id: user.id,
         username: xss(user.username),
-        img: xss(user.img)
+        img: xss(user.img),
       },
-    }
-  }
-}
+    };
+  },
+};
 
-module.exports = CommentsService
+module.exports = CommentsService;
