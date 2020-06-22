@@ -43,6 +43,8 @@ Validates the users JWT that is about to expire and sends a new JWT
 
 ### Comments Endpoints
 
+![Comments screenshots](https://github.com/f3ve/Blogium-api/tree/master/images)
+
 ### > `POST /api/comments`
 
 After validating user JWT saves a new comment to the database and responds with the serialized comment.
@@ -83,6 +85,8 @@ After validating user credentials removes comment from database'
 ```
 
 ### Posts Endpoints
+
+![Posts screenshot](https://github.com/f3ve/Blogium-api/blob/master/images/posts.png)
 
 ### > `GET /api/posts`
 
@@ -224,6 +228,8 @@ GET /api/posts/1/comments
 ```
 
 ### Users Endpoints
+
+![Users screenshot](https://github.com/f3ve/Blogium-api/blob/master/images/users.png)
 
 ### > `POST /api/users`
 
