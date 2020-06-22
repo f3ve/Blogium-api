@@ -43,7 +43,7 @@ Validates the users JWT that is about to expire and sends a new JWT
 
 ### Comments Endpoints
 
-![Comments screenshots](https://github.com/f3ve/Blogium-api/tree/master/images)
+![Comments screenshots](https://github.com/f3ve/Blogium-api/blob/master/images/comments.png)
 
 ### > `POST /api/comments`
 
